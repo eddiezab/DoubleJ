@@ -1,0 +1,4 @@
+*.json
+*.tmpl
+*.out
+*.pyc

@@ -2,3 +2,4 @@
 *.tmpl
 *.out
 *.pyc
+*~

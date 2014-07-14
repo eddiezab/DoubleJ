@@ -8,10 +8,21 @@ class TemplateRenderer:
 	template_data = None
 	jinja2_env = None
 
-	def __init__(self, variable_file):
-		self.jinja2_env = jinja2.Environment(
-			loader = jinja2.PackageLoader('doublej', 'templates')
-		)
+	def __init__(self, variable_file, latex_environment=False):
+		if not latex_environment:
+			self.jinja2_env = jinja2.Environment(
+				loader = jinja2.PackageLoader('doublej', 'templates')
+			)
+		else:
+			self.jinja2_env = jinja2.Environment(
+				loader = jinja2.PackageLoader('doublej', 'templates'),
+				block_start_string = '[%',
+				block_end_string = '[%',
+				variable_start_string = '[[',
+				variable_end_string = ']]',
+				comment_start_string = '[#',
+				comment_end_string = '#]',
+			)
 
 		with open(variable_file, 'r') as json_data:
 			self.template_data = json.loads(json_data.read())
@@ -35,7 +46,7 @@ class TemplateRenderer:
 			)
 
 if __name__ == '__main__':	
-	testRenderer = TemplateRenderer(sys.argv[1])
+	testRenderer = TemplateRenderer(sys.argv[1], latex_environment=True)
 	testRenderer.renderTemplate(sys.argv[2],sys.argv[3])
 	if 4 in sys.argv:
 		testRenderer.addVariableFile(sys.argv[4])
